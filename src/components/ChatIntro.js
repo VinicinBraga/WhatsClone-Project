@@ -11,7 +11,7 @@ export default class ChatIntro extends Component {
         <h2>
           O whatsApp conecta ao seu telefone para sincronizar suas mensagens.
           <br />
-          Para reduzir o uso de dados, conecte seu telefone a uma rede Wi-fi
+          Para reduzir o uso de dados, conecte seu telefone a uma rede Wi-fi.
         </h2>
       </div>
     );
