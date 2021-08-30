@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import EmojiPicker from "emoji-picker-react";
 import "./ChatWindow.css";
+
+import MenssageItem from "./MenssageItem";
 
 import SearchIcon from "@material-ui/icons/Search";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
@@ -10,10 +12,35 @@ import CloseIcon from "@material-ui/icons/Close";
 import SendIcon from "@material-ui/icons/Send";
 import MicIcon from "@material-ui/icons/Mic";
 
-export default function ChatWindow() {
-  const [emojiOpen, setEmojiOpen] = useState(false);
+export default function ChatWindow({ user }) {
+  const body = useRef();
 
-  const handleEmojiClick = () => {};
+  let recognition = null;
+  let SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition !== undefined) {
+    recognition = new SpeechRecognition();
+  }
+
+  const [emojiOpen, setEmojiOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [listening, setListening] = useState(false);
+  const [list, setList] = useState([
+    { author: 1, body: "Fala, Zezé!" },
+    { author: 2, body: "E ai, Thiago" },
+    { author: 3, body: "Beleza, cara?" },
+  ]);
+
+  useEffect(() => {
+    if (body.current.scrollHeight > body.current.offsetHeight) {
+      body.current.scrollTop =
+        body.current.scrollHeight - body.current.offsetHeight;
+    }
+  }, [list]);
+
+  const handleEmojiClick = (e, emojiObject) => {
+    setText(text + emojiObject.emoji);
+  };
 
   const handleOpenEmoji = () => {
     setEmojiOpen(true);
@@ -21,6 +48,22 @@ export default function ChatWindow() {
   const handleCloseEmoji = () => {
     setEmojiOpen(false);
   };
+  const handleSendClick = () => {};
+  const handleMicClick = () => {
+    if (recognition !== null) {
+      recognition.onstart = () => {
+        setListening(true);
+      };
+      recognition.onend = () => {
+        setListening(false);
+      };
+      recognition.onresult = (e) => {
+        setText(e.results[0][0].transcript);
+      };
+      recognition.start();
+    }
+  };
+
   return (
     <div className="chatWindow">
       <div className="chatWindow--header">
@@ -41,7 +84,11 @@ export default function ChatWindow() {
           </div>
         </div>
       </div>
-      <div className="chatWindow--body"></div>
+      <div ref={body} className="chatWindow--body">
+        {list.map((item, key) => (
+          <MenssageItem key={key} data={item} user={user} />
+        ))}
+      </div>
       <div
         className="chatWindow--emojiarea"
         style={{ height: emojiOpen ? "200px" : "0px" }}
@@ -54,11 +101,18 @@ export default function ChatWindow() {
       </div>
       <div className="chatWindow--footer">
         <div className="chatWindow--pre">
-          <div className="chatWindow--btn" onClick={handleCloseEmoji}>
+          <div
+            id="close"
+            className="chatWindow--btn"
+            onClick={handleCloseEmoji}
+            style={{ width: emojiOpen ? 40 : 0 }}
+          >
             <CloseIcon style={{ color: "#919191" }} />
           </div>
           <div className="chatWindow--btn" onClick={handleOpenEmoji}>
-            <InsertEmoticonIcon style={{ color: "#919191" }} />
+            <InsertEmoticonIcon
+              style={{ color: emojiOpen ? "#009688" : "#919191" }}
+            />
           </div>
         </div>
         <div className="chatWindow--inputarea">
@@ -66,15 +120,21 @@ export default function ChatWindow() {
             className="chatWindow--input"
             type="text"
             placeholder="Digite uma mensagem"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
           />
         </div>
         <div className="chatWindow--pos">
-          <div className="chatWindow--btn">
-            <SendIcon style={{ color: "#919191" }} />
-          </div>
-          <div className="chatWindow--btn">
-            <MicIcon style={{ color: "#919191" }} />
-          </div>
+          {text === "" && (
+            <div className="chatWindow--btn" onClick={handleMicClick}>
+              <MicIcon style={{ color: listening ? "#126ECE" : "#919191" }} />
+            </div>
+          )}
+          {text !== "" && (
+            <div className="chatWindow--btn" onClick={handleSendClick}>
+              <SendIcon style={{ color: "#919191" }} />
+            </div>
+          )}
         </div>
       </div>
     </div>

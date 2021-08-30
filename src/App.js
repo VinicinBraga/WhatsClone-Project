@@ -32,15 +32,17 @@ function App() {
     },
   ]);
   const [activeChat, setactiveChat] = useState({});
+  const [user, setUser] = useState({
+    id: 2,
+    avatar:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5UccHxXotQA8rNbk-aZ344Ow9d4Cn0qE8ap3y-c7pio4msVjFAfUVU8xnSm-ORjIjRuA&usqp=CAU",
+    name: "User Exemplo",
+  });
   return (
     <div className="app-window">
       <div className="sidebar">
         <header>
-          <img
-            className="header--avatar"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5UccHxXotQA8rNbk-aZ344Ow9d4Cn0qE8ap3y-c7pio4msVjFAfUVU8xnSm-ORjIjRuA&usqp=CAU"
-            alt=""
-          />
+          <img className="header--avatar" src={user.avatar} alt="" />
           <div className="header--buttons">
             <div className="header--btn">
               <DonutLargeIcon style={{ color: "#919191" }} />
@@ -74,7 +76,7 @@ function App() {
         </div>
       </div>
       <div className="contentarea">
-        {activeChat.chatId !== undefined && <ChatWindow />}
+        {activeChat.chatId !== undefined && <ChatWindow user={user} />}
         {activeChat.chatId === undefined && <ChatIntro />}
       </div>
     </div>
