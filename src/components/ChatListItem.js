@@ -12,7 +12,7 @@ export default function ChatListItem({ onClick, active, data }) {
         </div>
         <div className="chatListItem--line">
           <div className="chatlist--lastMsg">
-            <p>fala zeze</p>
+            <p>{data.lastMessage}</p>
           </div>
         </div>
       </div>

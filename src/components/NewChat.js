@@ -1,38 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./NewChat.css";
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import Api from "../Api";
 
 export default function NewChat({ chatlist, user, show, setShow }) {
-  const [list, setList] = useState([
-    {
-      id: 123,
-      avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5UccHxXotQA8rNbk-aZ344Ow9d4Cn0qE8ap3y-c7pio4msVjFAfUVU8xnSm-ORjIjRuA&usqp=CAU",
-      name: "Fulano(newChat)",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5UccHxXotQA8rNbk-aZ344Ow9d4Cn0qE8ap3y-c7pio4msVjFAfUVU8xnSm-ORjIjRuA&usqp=CAU",
-      name: "Fulano(newChat)",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5UccHxXotQA8rNbk-aZ344Ow9d4Cn0qE8ap3y-c7pio4msVjFAfUVU8xnSm-ORjIjRuA&usqp=CAU",
-      name: "Fulano(newChat)",
-    },
-    {
-      id: 123,
-      avatar:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5UccHxXotQA8rNbk-aZ344Ow9d4Cn0qE8ap3y-c7pio4msVjFAfUVU8xnSm-ORjIjRuA&usqp=CAU",
-      name: "Fulano(newChat)",
-    },
-  ]);
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    const getlist = async () => {
+      if (user !== null) {
+        let results = await Api.getContactList(user.id);
+        setList(results);
+      }
+    };
+    getlist();
+  }, [user]);
 
   const handleClose = () => {
     setShow(false);
+  };
+
+  const addNewChat = async (user2) => {
+    await Api.addNewChat(user, user2);
+
+    handleClose();
   };
   return (
     <div className="newChat" style={{ left: show ? 0 : -415 }}>
@@ -44,7 +36,11 @@ export default function NewChat({ chatlist, user, show, setShow }) {
       </div>
       <div className="newChat--list">
         {list.map((item, key) => (
-          <div className="newChat--item" key={key}>
+          <div
+            onClick={() => addNewChat(item)}
+            className="newChat--item"
+            key={key}
+          >
             <img className="newChat--itemavatar" src={item.avatar} alt="" />
             <div className="newChat--itemname">{item.name}</div>
           </div>
