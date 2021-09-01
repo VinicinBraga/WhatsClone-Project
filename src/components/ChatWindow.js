@@ -11,8 +11,9 @@ import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import CloseIcon from "@material-ui/icons/Close";
 import SendIcon from "@material-ui/icons/Send";
 import MicIcon from "@material-ui/icons/Mic";
+import Api from "../Api";
 
-export default function ChatWindow({ user }) {
+export default function ChatWindow({ user, data }) {
   const body = useRef();
 
   let recognition = null;
@@ -25,11 +26,14 @@ export default function ChatWindow({ user }) {
   const [emojiOpen, setEmojiOpen] = useState(false);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
-  const [list, setList] = useState([
-    { author: 1, body: "Fala, Zezé!" },
-    { author: 2, body: "E ai, Thiago" },
-    { author: 3, body: "Beleza, cara?" },
-  ]);
+  const [list, setList] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    setList([]);
+    let unsub = Api.onChatContent(data.chatId, setList, setUsers);
+    return unsub;
+  }, [data.chatId]);
 
   useEffect(() => {
     if (body.current.scrollHeight > body.current.offsetHeight) {
@@ -48,7 +52,7 @@ export default function ChatWindow({ user }) {
   const handleCloseEmoji = () => {
     setEmojiOpen(false);
   };
-  const handleSendClick = () => {};
+
   const handleMicClick = () => {
     if (recognition !== null) {
       recognition.onstart = () => {
@@ -63,17 +67,25 @@ export default function ChatWindow({ user }) {
       recognition.start();
     }
   };
+  const handleInputKeyUp = (e) => {
+    if (e.keyCode === 13) {
+      handleSendClick();
+    }
+  };
+  const handleSendClick = () => {
+    if (text !== "") {
+      Api.sendMessage(data, user.id, "text", text, users);
+      setText("");
+      setEmojiOpen(false);
+    }
+  };
 
   return (
     <div className="chatWindow">
       <div className="chatWindow--header">
         <div className="chatWindow--headerinfo">
-          <img
-            className="chatWindow--avatar"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5UccHxXotQA8rNbk-aZ344Ow9d4Cn0qE8ap3y-c7pio4msVjFAfUVU8xnSm-ORjIjRuA&usqp=CAU"
-            alt=""
-          />
-          <div className="chatWindow--name">Vini Braga</div>
+          <img className="chatWindow--avatar" src={data.image} alt="" />
+          <div className="chatWindow--name">{data.title}</div>
         </div>
 
         <div className="chatWindow--headerbuttons">
@@ -122,6 +134,7 @@ export default function ChatWindow({ user }) {
             placeholder="Digite uma mensagem"
             value={text}
             onChange={(e) => setText(e.target.value)}
+            onKeyUp={handleInputKeyUp}
           />
         </div>
         <div className="chatWindow--pos">
