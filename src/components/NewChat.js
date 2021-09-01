@@ -8,23 +8,23 @@ export default function NewChat({ chatlist, user, show, setShow }) {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    const getlist = async () => {
+    const getList = async () => {
       if (user !== null) {
         let results = await Api.getContactList(user.id);
         setList(results);
       }
     };
-    getlist();
+    getList();
   }, [user]);
-
-  const handleClose = () => {
-    setShow(false);
-  };
 
   const addNewChat = async (user2) => {
     await Api.addNewChat(user, user2);
 
     handleClose();
+  };
+
+  const handleClose = () => {
+    setShow(false);
   };
   return (
     <div className="newChat" style={{ left: show ? 0 : -415 }}>

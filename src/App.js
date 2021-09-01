@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
+import Api from "./Api";
+
 import ChatListItem from "./components/ChatListItem";
 import ChatIntro from "./components/ChatIntro";
 import ChatWindow from "./components/ChatWindow";
 import NewChat from "./components/NewChat";
 import Login from "./components/Login";
-import Api from "./Api";
 
 import DonutLargeIcon from "@material-ui/icons/DonutLarge";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -14,19 +15,18 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
 
 function App() {
-  const [chatlist, setchatlist] = useState([]);
-  const [activeChat, setactiveChat] = useState({});
+  const [chatList, setChatList] = useState([]);
+  const [activeChat, setActiveChat] = useState({});
   const [user, setUser] = useState({
-    id: "Bc4nEL3v5aYH0e2lj7f2",
+    id: "Vrfq8gYQYecDWW3Wsc9WPQR0IGF3",
     name: "Vini",
-    avatar:
-      "https://scontent.fplu9-1.fna.fbcdn.net/v/l/t1.6435-1/cp0/p32x32/44948695_10216607519956137_442810187619762176_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=dbb9e7&_nc_eui2=AeHadoA9xBOZuhqaYeWAovbq3XIt9oAlJZjdci32gCUlmBi_KHCRlTSFANjZXk1uy6g&_nc_ohc=cjpTIBcWWqAAX8PpgO0&_nc_ht=scontent.fplu9-1.fna&oh=b2f80b15c285db9cc98b9d883567e3ba&oe=6153D65F",
+    avatar: "https://graph.facebook.com/10225076117345779/picture",
   });
-  const [showNewCHat, setShowNewCHat] = useState(false);
+  const [showNewChat, setShowNewCHat] = useState(false);
 
   useEffect(() => {
     if (user !== null) {
-      let unsub = Api.onChatList(user.id, setchatlist);
+      let unsub = Api.onChatList(user.id, setChatList);
       return unsub;
     }
   }, [user]);
@@ -44,18 +44,16 @@ function App() {
     await Api.addUser(newUser);
     setUser(newUser);
   };
-
   if (user === null) {
     return <Login onReceive={handleLoginData} />;
   }
-
   return (
     <div className="app-window">
       <div className="sidebar">
         <NewChat
-          chatlist={chatlist}
+          chatList={chatList}
           user={user}
-          show={showNewCHat}
+          show={showNewChat}
           setShow={setShowNewCHat}
         />
         <header>
@@ -81,14 +79,13 @@ function App() {
             ></input>
           </div>
         </div>
-        x
-        <div className="chatlist">
-          {chatlist.map((item, key) => (
+        <div className="chatList">
+          {chatList.map((item, key) => (
             <ChatListItem
               key={key}
               data={item}
-              active={activeChat.chatId === chatlist[key].chatId}
-              onClick={() => setactiveChat(chatlist[key])}
+              active={activeChat.chatId === chatList[key].chatId}
+              onClick={() => setActiveChat(chatList[key])}
             />
           ))}
         </div>

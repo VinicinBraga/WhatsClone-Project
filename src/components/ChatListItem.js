@@ -7,15 +7,13 @@ export default function ChatListItem({ onClick, active, data }) {
   useEffect(() => {
     if (data.lastMessageDate > 0) {
       let d = new Date(data.lastMessageDate.seconds * 1000);
-      console.log(d);
       let hours = d.getHours();
       let minutes = d.getMinutes();
-      hours = hours < 10 ? "0" + minutes : hours;
+      hours = hours < 10 ? "0" + hours : hours;
       minutes = minutes < 10 ? "0" + minutes : minutes;
       setTime(`${hours}:${minutes}`);
     }
   }, [data]);
-
   return (
     <div className={`chatListItem ${active ? "active" : ""}`} onClick={onClick}>
       <img className="chatListItem--avatar" src={data.image} alt="" />
