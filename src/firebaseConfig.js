@@ -1,9 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
 export default {
-  apiKey: "AIzaSyAjviBEpJj2RF_XmIYXsiDy7LwuEmtSUc0",
-  authDomain: "whatsapp-clone-69773.firebaseapp.com",
-  projectId: "whatsapp-clone-69773",
-  storageBucket: "whatsapp-clone-69773.appspot.com",
-  messagingSenderId: "621978763937",
-  appId: "1:621978763937:web:00ecc3d513a3938530e6e0",
+  apiKey: "AIzaSyB2Cupl91gScEzujOi-IBlu-rsCAXpbaqg",
+  authDomain: "whatsappclone-25167.firebaseapp.com",
+  projectId: "whatsappclone-25167",
+  storageBucket: "whatsappclone-25167.appspot.com",
+  messagingSenderId: "205681148092",
+  appId: "1:205681148092:web:7d47a8a9d03f66e1d3d0b9",
 };
