@@ -1,11 +1,11 @@
 # :fire: Clone do WhatsApp + Firebase em ReactJS
 
 <p align="center">
-  <img src="./images/initial.png" width="600">
-  <img src="./images/initial1.png" width="600">
-  <img src="./images/emojis.png" width="600">
-  <img src="./images/EmilyTest.png" width="600">
-  <img src="./images/renata.png" width="600">
+  <img src="./img/initial.png" width="600">
+  <img src="./img/initial1.png" width="600">
+  <img src="./img/emojis.png" width="600">
+  <img src="./img/EmilyTest.png" width="600">
+  <img src="./img/renata.png" width="600">
   
 </p>
 
